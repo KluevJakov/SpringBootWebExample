@@ -20,10 +20,6 @@ public class TaskService {
     }
 
     public TaskDto createTask(TaskDto task) {
-        if (task.getId() == null || task.getName() == null) {
-            throw new IllegalArgumentException("id и name - обязательные поля");
-        }
-
         boolean exists = getByTaskId(task.getId()).isPresent();
 
         if (exists) {

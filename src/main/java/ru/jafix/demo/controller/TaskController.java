@@ -1,5 +1,6 @@
 package ru.jafix.demo.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +28,7 @@ public class TaskController {
     }
 
     @PostMapping("/tasks")
-    private TaskDto createTask(@RequestBody TaskDto task) {
+    private TaskDto createTask(@RequestBody @Valid TaskDto task) {
         return taskService.createTask(task);
     }
 
