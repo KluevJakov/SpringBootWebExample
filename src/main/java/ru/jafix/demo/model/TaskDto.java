@@ -9,10 +9,10 @@ import java.util.UUID;
 @Data
 public class TaskDto {
 
-    @NotNull
+    @NotNull(message = "Идентификатор является обязательным")
     private UUID id;
 
-    @NotEmpty
+    @NotEmpty(message = "Поле name не должно быть пустым")
     private String name;
 
     private boolean completed;
