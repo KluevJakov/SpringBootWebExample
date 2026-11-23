@@ -1,14 +1,20 @@
 package ru.jafix.demo.controller;
 
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import ru.jafix.demo.enums.MediaTypes;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -58,4 +64,42 @@ public class FileController {
 
     }
 
+
+
+    @GetMapping("/download")
+    public ResponseEntity<byte[]> download(@RequestParam("filename") String filename) throws FileNotFoundException {
+
+        if (filename.contains("/")
+            || filename.contains("\\")) {
+            throw new IllegalArgumentException("Не пытайтесь нас взломать");
+        }
+
+        try (FileInputStream fos = new FileInputStream(filename)) {
+
+            String ext = getExtension(filename);
+            MediaType contentType = MediaTypes.getMediaTypeByExtension(ext);
+
+            return ResponseEntity
+                    .status(200)
+                    .contentType(contentType)
+                    .body(fos.readAllBytes());
+
+        } catch (FileNotFoundException fnf) {
+            System.out.println("Ошибка открытия файла: " + fnf.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        throw new FileNotFoundException("Файл " + filename + " не найден");
+    }
+
+    private String getExtension(String filename) {
+        int dotPos = filename.lastIndexOf('.');
+
+        if (dotPos == -1) {
+            return "no-extension";
+        }
+
+        return filename.substring(dotPos + 1);
+    }
 }
