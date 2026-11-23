@@ -1,6 +1,7 @@
 package ru.jafix.demo.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.jafix.demo.mapper.TaskMapper;
+import ru.jafix.demo.model.Task;
 import ru.jafix.demo.model.TaskDto;
 import ru.jafix.demo.service.TaskService;
 
@@ -18,17 +21,25 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 public class TaskController {
 
     private final TaskService taskService;
-
-    @Autowired
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
+    private final TaskMapper taskMapper;
 
     @PostMapping("/tasks")
     private TaskDto createTask(@RequestBody @Valid TaskDto task) {
+
+
+        TaskDto taskDto = TaskDto.builder()
+                .id(UUID.randomUUID())
+                .name("Простая задача")
+                .completed(false)
+                .build();
+
+        Task result = taskMapper.fromDto(taskDto);
+
+
         return taskService.createTask(task);
     }
 
