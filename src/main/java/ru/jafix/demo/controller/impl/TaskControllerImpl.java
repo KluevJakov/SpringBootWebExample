@@ -15,6 +15,7 @@ import ru.jafix.demo.controller.TaskController;
 import ru.jafix.demo.mapper.TaskMapper;
 import ru.jafix.demo.model.Task;
 import ru.jafix.demo.model.TaskDto;
+import ru.jafix.demo.service.IntegrationService;
 import ru.jafix.demo.service.TaskService;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.UUID;
 public class TaskControllerImpl implements TaskController {
 
     private final TaskService taskService;
+    private final IntegrationService integrationService;
     private final TaskMapper taskMapper;
 
 
@@ -48,6 +50,7 @@ public class TaskControllerImpl implements TaskController {
     @Override
     @GetMapping("/tasks")
     public List<TaskDto> getAllTasks() {
+        integrationService.sendRequest();
         return taskService.getAllTasks();
     }
 
