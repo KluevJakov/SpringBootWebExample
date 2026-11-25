@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '4.1.2'
+    id 'org.openapi.generator' version '7.14.0'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -22,6 +23,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.0'
+    implementation 'org.openapitools:openapi-generator-gradle-plugin:7.14.0'
     implementation 'org.mapstruct:mapstruct:1.6.3'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
@@ -32,6 +35,22 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+openApiGenerate {
+    generatorName = "java"
+
+    inputSpec = "$rootDir/api-docs.json"
+
+    outputDir = "$buildDir/generated"
+
+    apiPackage = "ru.jafix.api"
+    modelPackage = "ru.jafix.model"
+    invokerPackage = "ru.jafix.invoker"
+}
+
+openApiValidate {
+    inputSpec = "$rootDir/api-docs.json"
 }
 
 tasks.named('test') {
