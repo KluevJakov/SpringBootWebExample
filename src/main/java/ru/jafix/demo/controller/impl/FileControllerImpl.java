@@ -1,4 +1,4 @@
-package ru.jafix.demo.controller;
+package ru.jafix.demo.controller.impl;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 @RestController
-public class FileController {
+public class FileControllerImpl {
 
     @PostMapping(
             path = "/upload1",
